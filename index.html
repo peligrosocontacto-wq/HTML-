@@ -1,0 +1,2016 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Horror Analógico</title>
+    <link rel="icon" type="image/jpg" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeRhCxI4JAbzGByIx0AMAuDf6lyQRgk2ZDHqxcL4trBg&s=10">
+    <style>  
+        
+        body {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(rgba(10,10,10,0.5), rgba(10,10,10,0.6));
+            background-size: cover;
+            color: #c0c0c0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ========== VIDEO DE FONDO - ESTÁTICA DE TV ========== */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            filter: brightness(0.2) contrast(1.5) grayscale(0.8);
+        }
+
+        /* Capa oscura sobre el video */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10%;
+            height: 10%;
+            background: linear-gradient(rgba(10,10,10,0.6), rgba(10,10,10,0.6));
+            z-index: -1;
+        }
+
+        /* Efecto de estática adicional (CSS) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.2; /* Aumenté la opacidad para más efecto */
+            animation: static 0.1s infinite; /* Más rápido para simular estática real */
+        }
+
+        @keyframes static {
+            0% { transform: translateY(10px); }
+            100% { transform: translateY(9px); }
+        }
+
+        h1 { 
+            color: #8b0000; 
+            text-align: center; 
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #8b0000;
+            font-size: 2.5em;
+            letter-spacing: 3px;
+            margin-top: 20px;
+            animation: flicker 4s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.7;
+            }
+        }
+
+        p { 
+            font-size: 16px; 
+            margin: 20px; 
+            padding: 15px; 
+            border: 1px solid #5a0000; 
+            background-color: rgba(10, 0, 0, 0.7);
+            box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        p::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 0, 0, 0.1),
+                transparent
+            );
+            animation: scan 6s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        ul { 
+            list-style-type: none; 
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        li::before {
+            content: "■";
+            color: #8b0000;
+            position: absolute;
+            left: 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Estilos de pestañas */
+        .tab-container { 
+            display: flex; 
+            border-bottom: 2px solid #5a0000; 
+            margin-bottom: 20px; 
+            background-color: rgba(20, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(139, 0, 0, 0.2),
+                transparent
+            );
+            animation: glitch 10s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-5px); }
+            20% { transform: translateX(5px); }
+            30% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            50% { transform: translateX(0); }
+        }
+
+        .tab { 
+            flex: 1; 
+            padding: 12px; 
+            text-align: center; 
+            cursor: pointer; 
+            font-weight: bold;
+            color: #a0a0a0; 
+            border-bottom: 3px solid transparent; 
+            transition: 0.3s; 
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab:hover { 
+            background-color: rgba(139, 0, 0, 0.3); 
+            color: #ff6b6b;
+        }
+
+        .tab.active { 
+            color: #ff0000; 
+            border-bottom: 3px solid #8b0000; 
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        /* Contenido de pestañas */
+        .tab-content { 
+            display: none; 
+            animation: fadeIn 0.5s; 
+            padding: 20px;
+            position: relative;
+        }
+
+        .tab-content::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(139, 0, 0, 0.03) 0px,
+                rgba(139, 0, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .tab-content.active { 
+            display: block; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        button {
+            background-color: #300000;
+            color: #c0c0c0;
+            border: 1px solid #5a0000;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s;
+            margin-right: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background-color: #5a0000;
+            color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 10, 0, 0.5);
+        }
+
+        button::after {
+            content: "";
+            position: absolute;
+            top: -90%;
+            left: -90%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle,
+                rgba(255, 0, 0, 0.2) 0%,
+                transparent 70%
+            );
+            transform: scale(0);
+            transition: transform 0.5s;
+        }
+
+        button:hover::after {
+            transform: scale(1);
+        }
+
+        a {
+            color: #ff6b6b;
+            text-decoration: none;
+            border-bottom: 1px dotted #5a0000;
+            transition: all 0.9s;
+        }
+
+        a:hover {
+            color: #ff0000;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+            border-bottom: 1px dotted #ff0000;
+        }
+
+        /* Efecto de distorsión ocasional */
+        .glitch-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+            url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPt_ZBS1H1Mtm2wC5vzI8Z6tvEcqPoqEQtOYFeEYw8fQ&s=10");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            animation: glitch-appear 5s infinite;
+            mix-blend-mode: overlay;
+        }
+
+        @keyframes glitch-appear {
+            0%, 95% { opacity: 0; }
+            96%, 98% { opacity: 4.5; }
+            97%, 99% { opacity: 4.5; }
+            100% { opacity: 4.5; }
+        }
+
+        /* Efecto de línea de escaneo */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 5px;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(0, 255, 0, 0.2),
+                transparent
+            );
+            z-index: 999;
+            animation: scan-line 6s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan-line {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        /* Estilos para el GIF */
+        .evidence-gif {
+            display: block;
+            margin: 20px auto;
+            max-width: 80%;
+            border: 2px solid #5a0000;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
+            border-radius: 5px;
+            animation: pulse-gif 3s infinite alternate;
+        }
+
+        @keyframes pulse-gif {
+            0% { box-shadow: 0 0 15px rgba(139, 0, 0, 0.7); }
+            100% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.9); }
+        }
+
+        /* Animación para el esqueleto y calavera */
+        .skeleton-container {
+            display: inline-block;
+            position: relative;
+            width: 60px;
+            height: 80px;
+        }
+
+        .skeleton {
+            font-size: 80px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: skeleton-destroy 6s infinite;
+            transform-origin: center;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000;
+        }
+
+        .skull {
+            font-size: 60px;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            opacity: 0;
+            animation: skull-appear 6s infinite;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000;
+            transform-origin: center;
+        }
+
+        @keyframes skeleton-destroy {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            40% {
+                transform: scale(1.1) rotate(5deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
+                opacity: 0.8;
+            }
+            60% {
+                transform: scale(0.8) rotate(-5deg);
+                opacity: 0.6;
+            }
+            70% {
+                transform: scale(0.5) rotate(-10deg);
+                opacity: 0.4;
+            }
+            80% {
+              transform: scale(0.3) rotate(-15deg);
+                opacity: 0.2;
+            }
+            90% {
+                transform: scale(0.1) rotate(-20deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(0) rotate(-25deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes skull-appear {
+            0%, 70% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            75% {
+                transform: scale(1.5) rotate(180deg);
+                opacity: 0.8;
+            }
+            80% {
+                transform: scale(1.2) rotate(360deg);
+                opacity: 1;
+            }
+            85% {
+                transform: scale(1.1) rotate(540deg);
+                opacity: 1;
+            }
+            90% {
+                transform: scale(1) rotate(720deg);
+                opacity: 1;
+            }
+            95% {
+                transform: scale(1.05) rotate(740deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(720deg);
+                opacity: 1;
+            }
+        }
+
+        /* Estilos para formulario de contacto */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(10, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 0, 0, 0.1),
+                transparent
+            );
+            animation: scan 8s linear infinite;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(20, 0, 0, 0.8);
+            border: 1px solid #5a0000;
+            color: #c0c0c0;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #300000;
+            color: #c0c0c0;
+            border: 1px solid #5a0000;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            background-color: #5a0000;
+            color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 10, 0, 0.7);
+        }
+
+        .contact-info {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: rgba(15, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+        }
+
+        .contact-info h3 {
+            color: #ff6b6b;
+            margin-top: 0;
+            border-bottom: 1px solid #5a0000;
+            padding-bottom: 10px;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+            border: none;
+            background: none;
+            box-shadow: none;
+            padding: 5px;
+        }
+
+        .contact-info p::before {
+            display: none;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #8b0000;
+            border-top: 1px solid #5a0000;
+        }
+
+        /* Estilos para la nueva pestaña 4 */
+        .warning-box {
+            background-color: rgba(50, 0, 0, 0.8);
+            border: 2px solid #8b0000;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning-box::before {
+            content: "⚠️";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+        }
+
+        .warning-box::after {
+            content: "⚠️";
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 1.5em;
+        }
+
+        .entity-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .entity-card {
+            background-color: rgba(15, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .entity-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 0, 0, 0.05),
+                transparent
+            );
+            animation: scan 10s linear infinite;
+        }
+
+        .entity-card h3 {
+            color: #ff6b6b;
+            margin-top: 0;
+            border-bottom: 1px solid #5a0000;
+            padding-bottom: 10px;
+        }
+
+        /* ========== ESTILOS PARA LA RADIO HORROR ANALÓGICO ========== */
+        .radio-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(10, 0, 0, 0.8);
+            border: 2px solid #5a0000;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radio-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(139, 0, 0, 0.1),
+                transparent
+            );
+            pointer-events: none;
+        }
+
+        .radio-display-horror {
+            background: #000;
+            border: 1px solid #5a0000;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            min-height: 100px;
+            box-shadow: inset 0 0 10px #1a0000;
+        }
+
+        .frequency {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #8b0000;
+        }
+
+        .station-name {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .song-info {
+            font-size: 0.9rem;
+            text-align: center;
+            opacity: 0.8;
+            min-height: 20px;
+            font-style: italic;
+        }
+
+        .visualizer {
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #5a0000;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: inset 0 0 10px #1a0000;
+        }
+
+        .bar {
+            width: 6px;
+            background: linear-gradient(to top, #8b0000, #ff0000);
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: height 0.1s;
+        }
+
+        .radio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 25px 0;
+        }
+
+        .radio-control-btn {
+            background: #1a0000;
+            border: 1px solid #5a0000;
+            color: #8b0000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 5px #5a0000;
+        }
+
+        .radio-control-btn:hover {
+            background: #2a0000;
+            box-shadow: 0 0 10px #8b0000;
+        }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            background: #2a0000;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .volume-slider {
+            width: 200px;
+            margin: 0 15px;
+            -webkit-appearance: none;
+            height: 5px;
+            background: #1a0000;
+            border-radius: 5px;
+            outline: none;
+            border: 1px solid #5a0000;
+        }
+             .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #8b0000;
+            cursor: pointer;
+            box-shadow: 0 0 5px #8b0000;
+        }
+
+        .broadcast-section {
+            border-top: 1px solid #5a0000;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .broadcast-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .broadcast-btn {
+            background: #1a0000;
+               border: 1px solid #5a0000;
+            color: #8b0000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 5px #5a0000;
+        }
+
+        .broadcast-btn:hover {
+            background: #2a0000;
+            box-shadow: 0 0 10px #8b0000;
+        }
+
+        .broadcast-btn.recording {
+            background: #3a0000;
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 15px #ff0000;
+        }
+
+        .upload-audio {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .upload-btn {
+            background: #1a0000;
+            border: 1px dashed #5a0000;
+            color: #8b0000;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .upload-btn:hover {
+            background: #2a0000;
+            border-style: solid;
+        }
+
+        .status {
+            margin-top: 15px;
+            text-align: center;
+            font-style: italic;
+            opacity: 0.8;
+            min-height: 20px;
+        }
+
+        .recordings-section {
+            border-top: 1px solid #5a0000;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .recordings-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #5a0000;
+            border-radius: 5px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .recording-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #8b0000;
+        }
+
+        .recording-info {
+            flex: 1;
+        }
+
+        .recording-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .recording-date {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .recording-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #5a0000;
+            color: #8b0000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .empty-recordings {
+            text-align: center;
+            opacity: 0.5;
+            font-style: italic;
+            padding: 10px;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 5px #8b0000;
+            }
+            100% {
+                text-shadow: 0 0 10px #8b0000, 0 0 20px #ff0000;
+            }
+        }
+
+        .flicker {
+            animation: flicker 3s infinite alternate;
+        }
+
+        /* Efectos de glitch para la radio */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #00ffff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(4px, 9999px, 91px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        }
+
+        /* Estilos para el acceso de desarrollador */
+        .dev-access {
+            background: rgba(20, 0, 0, 0.9);
+            border: 2px solid #8b0000;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.7);
+        }
+
+        .dev-access h3 {
+            color: #ff6b6b;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .dev-access input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            color: #c0c0c0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .dev-access button {
+            width: 50%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .dev-controls {
+            display: none; /* Inicialmente oculto */
+        }
+
+        .access-denied {
+            color: #8b0000;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* Estilos para la biblioteca de audios */
+        .audio-library {
+            margin-top: 20px;
+            border-top: 1px solid #5a0000;
+            padding-top: 20px;
+        }
+
+        .audio-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #8b0000;
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .audio-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .library-empty {
+            text-align: center;
+            opacity: 0.5;
+            font-style: italic;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+     <!-- ========== VIDEO DE ESTÁTICA DE TV ========== -->
+    <video class="video-background" autoplay muted loop>
+        <source src="https://assets.codepen.io/3364143/static-video.mp4" type="video/mp4">
+        <!-- Video alternativo de estática -->
+        Tu navegador no soporta videos HTML5.
+    </video>
+    
+    <!-- Capa oscura sobre el video -->
+    <div class="overlay"></div>
+    
+    <div class="glitch-effect"></div>
+    <div class="scan-line"></div>
+    
+    <h1>REINO DEL HORROR ANALÓGICO 
+        <span class="skeleton-container">
+            <span class="skeleton">💀</span>
+            <span class="skull">☠️</span>
+        </span>
+    </h1>
+    
+    <div class="tab-container">
+        <div class="tab active" onclick="openTab(event, 'tab1')">ARCHIVOS</div>
+        <div class="tab" onclick="openTab(event, 'tab2')">ENTIDADES</div>
+        <div class="tab" onclick="openTab(event, 'tab3')">EVIDENCIAS</div>
+        <div class="tab" onclick="openTab(event, 'tab4')">AVISTAMIENTOS</div>
+        <div class="tab" onclick="openTab(event, 'tab5')">CONTACTO OFICIAL</div>
+        <div class="tab" onclick="openTab(event, 'tab6')">RADIO OCULTA</div>
+    </div>
+    
+    <div id="tab1" class="tab-content active">
+        <ul>
+            <p>REGISTROS CLASIFICADOS</p>
+            <li>
+                <button onclick="alert('ADVERTENCIA: Los archivos que va a acceder pueden afectar su percepción de la realidad')">CONFIRMAR ACCESO</button>
+                <a href="https://creepypastaspain.com/" target="_blank">Archivo: Leyendas Urbanas Digitales</a>
+            </li>
+  
+            <p>Registros no clasificados</p>
+            <li>
+                <button onclick="alert('ADVERTENCIA: La entidad conocida como El Susurrador puede detectar su presencia')">CONFIRMAR ACCESO</button>
+                <a href="https://www.reddit.com/r/analoghorror/" target="_blank">Foro: Horror Analógico Internacional</a>
+            </li>
+  
+            <p>REGISTROS DE ACTIVIDAD PARANORMAL</p>
+            <li>
+                <button onclick="alert('ADVERTENCIA: Este material ha sido reportado como cognitivamente peligroso')">CONFIRMAR ACCESO</button>
+                <a href="https://the-night-time.net/" target="_blank">Documento: Fenómeno de estática consciente</a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="tab2" class="tab-content">
+        <h2>CATÁLOGO DE ENTIDADES</h2>
+        <ul>
+            <p>EL HOMBRE DE LA ESTÁTICA</p>
+            <li>
+                <button onclick="alert('ADVERTENCIA: Esta entidad se manifiesta a través de dispositivos analógicos')">CONFIRMAR ACCESO</button>
+                <a href="https://scp-wiki.wikidot.com/" target="_blank">Perfil: Aparece en transmisiones interrumpidas</a>
+            </li>
+ 
+            <p>LA VOZ EN EL BLANCO Y NEGRO</p>
+            <li>
+                <button onclick="alert('ADVERTENCIA: Esta entidad puede reconocer cuando es observada')">CONFIRMAR ACCESO</button>
+                <a href="https://www.theblacktapespodcast.com/" target="_blank">Perfil: Se comunica a través de ruido blanco</a>
+            </li>
+            
+            <p>LOS ROSTROS EN LA DISTORSIÓN</p>
+            <li>
+                <button onclick="alert('ADVERTENCIA: Estas entidades buscan replicarse a través de medios visuales')">CONFIRMAR ACCESO</button>
+                <a href="https://local58.tv/" target="_blank">Perfil: Aparecen en grabaciones deterioradas</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div id="tab3" class="tab-content">
+        <h2>EVIDENCIAS VISUALES</h2>
+        <p>ADVERTENCIA: Las siguientes imágenes pueden contener información perturbadora que afecta la percepción.</p>
+        <p>Fotografías analógicas recuperadas de ubicaciones con actividad paranormal confirmada.</p>
+        <p>Se recomienda discreción al visualizar este material.</p>
+        
+        <!-- AQUÍ COLOCAMOS EL GIF -->
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPt_ZBS1H1Mtm2wC5vzI8Z6tvEcqPoqEQtOYFeEYw8fQ&s=10" alt="Evidencia paranormal" class="evidence-gif">
+        
+        <ul>
+            <li><a href="https://unsplash.com/s/photos/creepy-vhs" target="_blank">➤ Galería: Imágenes de estática anómala</a></li>
+            <li><a href="https://www.youtube.com/c/local58" target="_blank">➤ Archivo: Transmisiones perturbadas</a></li>
+            <li><a href="https://archive.org/details/oldtimeradio" target="_blank">➤ Colección: Grabaciones de audio paranormal</a></li>
+        </ul>
+    </div>
+
+    <div id="tab4" class="tab-content">
+        <h2>REGISTROS DE AVISTAMIENTOS</h2>
+        <div class="warning-box">
+            <p>ADVERTENCIA: Los siguientes casos han sido reportados por testigos con credibilidad verificada. 
+            Algunos casos pueden estar vinculados a actividad paranormal persistente.</p>
+        </div>
+        
+        <div class="entity-list">
+            <div class="entity-card">
+                <h3>Caso #734-A</h3>
+                <p><strong>Fecha:</strong> 15/10/2023</p>
+                <p><strong>Ubicación:</strong> Antigua estación de televisión abandonada</p>
+                <p><strong>Descripción:</strong> Figura humanoide detectada en grabaciones de seguridad. Aparece solo en los fotogramas con estática.</p>
+                <button onclick="alert('ADVERTENCIA: Visualizar este caso puede resultar en percepción residual')">VER DETALLES</button>
+            </div>
+            <div class="entity-card">
+                <h3>Caso #892-F</h3>
+                <p><strong>Fecha:</strong> 02/11/2023</p>
+                <p><strong>Ubicación:</strong> Residencia particular (zona rural)</p>
+                <p><strong>Descripción:</strong> Transmisión de televisión interrumpida por mensajes en código binario. Traducción: "ELLOS VIENEN".</p>
+                <button onclick="alert('ADVERTENCIA: Este caso está clasificado como de alto riesgo cognitivo')">VER DETALLES</button>
+            </div>
+            
+            <div class="entity-card">
+                <h3>Caso #556-X</h3>
+                <p><strong>Fecha:</strong> 28/09/2023</p>
+                <p><strong>Ubicación:</strong> Archivo nacional de medios</p>
+                <p><strong>Descripción:</strong> Cinta VHS recuperada muestra imágenes que no corresponden a su contenido original. Los rostros aparecen distorsionados.</p>
+                <button onclick="alert('ADVERTENCIA: La cinta original ha sido puesta en cuarentena')">VER DETALLES</button>
+            </div>
+        </div>
+        
+        <p style="text-align: center; margin-top: 30px;">
+            <button onclick="alert('Su solicitud ha sido registrada. Un investigador se pondrá en contacto si su caso es aprobado.')">REPORTAR NUEVO AVISTAMIENTO</button>
+        </p>
+    </div>
+
+    <div id="tab5" class="tab-content">
+        <h2>CONTACTO PELIGROSO</h2>
+        
+        <div class="warning-box">
+            <p>ADVERTENCIA: Cualquier información proporcionada a través de este formulario será registrada en nuestros archivos. 
+            No nos hacemos responsables por cualquier actividad paranormal que pueda manifestarse después del contacto.</p>
+        </div>
+        
+        <div class="contact-form">
+            <div class="form-group">
+                <label for="name">NOMBRE</label>
+                <input type="text" id="name" placeholder="Tu nombre">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">CORREO ELECTRÓNICO</label>
+                <input type="email" id="email" placeholder="tu@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="subject">ASUNTO</label>
+                <input type="text" id="subject" placeholder="Asunto del mensaje">
+            </div>
+            
+            <div class="form-group">
+                <label for="message">MENSAJE</label>
+                <textarea id="message" placeholder="Escribe tu mensaje aquí"></textarea>
+            </div>
+            
+            <button class="submit-btn" onclick="submitForm()">ENVIAR MENSAJE</button>
+        </div>
+        
+        <div class="contact-info">
+            <h3>INFORMACIÓN DE CONTACTO</h3>
+            <p><strong>Email:</strong> peligrosocontacto@gmail.com</p>
+            <p><strong>Teléfono:</strong> ******3302</p>
+            <p><strong>Dirección:</strong> Calle, 123</p>
+        </div>
+        
+        <p>ADVERTENCIA: El contacto con estas fuentes puede resultar en exposición a entidades no identificadas.</p>
+        <ul>
+            <li>Frecuencia de radio: 999.9 MHz (solo activa entre 3:00-3:33 AM)</li>
+            <li>Buzón de voz: ***-***-3302 (no responder a mensajes con estática)</li>
+            <li>Coordenadas: 40°42'46.5"N 74°00'21.5"W (acceso restringido)</li>
+            <li><a href="https://www.reddit.com/r/analoghorror/" target="_blank">Foro de Investigadores</a></li>
+            <li><a href="https://discord.gg/analoghorror" target="_blank">Canal de Comunicación Segura</a></li>
+        </ul>
+        <p style="color: #8b0000; text-align: center; margin-top: 30px;">RECUERDE: USTED HA ACCEDIDO VOLUNTARIAMENTE A ESTE ARCHIVO</p>
+    </div>
+        <div class="copyright">
+            © 2025 horror analógico. Todos los derechos reservados.
+        </div>
+    </div>
+    <!-- ========== NUEVA PESTAÑA - RADIO OCULTA ========== -->
+    <div id="tab6" class="tab-content">
+        <div class="warning-box">
+            <p>ADVERTENCIA: Esta radio capta transmisiones desde el vacío. Las grabaciones pueden contener mensajes ocultos o entidades que se manifiestan a través del audio.</p>
+        </div>
+        
+        <div class="radio-container">
+            <div class="radio-display-horror">
+                <div class="frequency pulse">999.9 FM</div>
+                <div class="station-name">ESTACIÓN DEL TERROR</div>
+                <div class="song-info" id="current-song">SINTONIZANDO...</div>
+            </div>
+
+            <div class="visualizer" id="visualizer">
+                <!-- Las barras del visualizador se generarán con JavaScript -->
+            </div>
+
+            <!-- Controles de reproducción (visibles para todos) -->
+            <div class="radio-controls">
+                <button class="radio-control-btn" id="prev-btn">
+                    <i class="fas fa-backward"></i>
+                </button>
+                <button class="radio-control-btn play-btn" id="play-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="radio-control-btn" id="next-btn">
+                    <i class="fas fa-forward"></i>
+                </button>
+            </div>
+
+            <div class="volume-control">
+                <i class="fas fa-volume-down"></i>
+                <input type="range" min="0" max="100" value="70" class="volume-slider" id="volume-slider">
+                <i class="fas fa-volume-up"></i>
+            </div>
+
+            <!-- Biblioteca de audios (visible para todos) -->
+            <div class="audio-library">
+                <h2 class="section-title flicker">BIBLIOTECA DE AUDIOS</h2>
+                <div class="recordings-list" id="audio-library-list">
+                    <!-- Los audios se cargarán aquí -->
+                </div>
+            </div>
+
+            <!-- Acceso de desarrollador -->
+            <div class="dev-access" id="dev-access">
+                <h3>ACCESO DE DESARROLLADOR</h3>
+                <p>Esta área está restringida. Solo el desarrollador puede acceder a los controles de transmisión.</p>
+                <input type="password" id="dev-password" placeholder="Contraseña de desarrollador">
+                <button onclick="checkDevAccess()">ACCEDER</button>
+            </div>
+
+            <!-- Controles de desarrollador (inicialmente ocultos) -->
+            <div class="dev-controls" id="dev-controls">
+                <div class="broadcast-section">
+                    <h2 class="section-title flicker">TRANSMISIÓN OCULTA</h2>
+                    <div class="broadcast-controls">
+                        <button class="broadcast-btn" id="broadcast-btn">
+                            <i class="fas fa-broadcast-tower"></i> CONECTAR SEÑAL
+                        </button>
+                        
+                        <div class="upload-audio">
+                            <label for="audio-upload" class="upload-btn">
+                                <i class="fas fa-upload"></i> SUBIR AUDIO A LA BIBLIOTECA
+                            </label>
+                            <input type="file" id="audio-upload" accept="audio/*" style="display: none;">
+                        </div>
+                        
+                        <p class="status" id="broadcast-status">SEÑAL INACTIVA</p>
+                    </div>
+                </div>
+
+                <div class="recordings-section">
+                    <h2 class="section-title flicker">GRABACIONES GUARDADAS</h2>
+                    <div class="recordings-list" id="recordings-list">
+                        <!-- Las grabaciones se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensaje de acceso denegado -->
+            <div class="access-denied" id="access-denied" style="display: none;">
+                <h3>ACCESO DENEGADO</h3>
+                <p>No tienes permisos para acceder a los controles de desarrollador.</p>
+                <p>Esta área está reservada exclusivamente para el desarrollador.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element (hidden) -->
+    <audio id="radio-audio"></audio>
+
+    <script>
+        // ========== FUNCIONES PARA LAS PESTAÑAS ==========
+        function openTab(evt, tabId) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('active'));
+            // Quitar "active" de todas las pestañas
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            // Mostrar el contenido seleccionado
+            document.getElementById(tabId).classList.add('active');
+            // Activar la pestaña clicada
+            evt.currentTarget.classList.add('active');
+            
+            // Efecto de sonido simulado (podría agregarse un sonido real)
+            try {
+                // Simular un clic de estática
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(100, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch(e) {
+                // Fallback silencioso si el audio no está disponible
+            }
+        }
+        
+        // Función para enviar el formulario
+        function submitForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (!name || !email || !subject || !message) {
+                alert('ADVERTENCIA: Todos los campos deben ser completados antes del envío.');
+                return;
+            }
+            alert('MENSAJE ENVIADO:\n\nSu comunicación ha sido registrada en nuestros archivos.\nEspere una respuesta en un plazo de 3-5 días laborales.\n\nADVERTENCIA: Esté atento a cualquier actividad inusual después del envío.');
+            
+            // Limpiar formulario
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('subject').value = '';
+            document.getElementById('message').value = '';
+        }
+        
+        // Efecto de distorsión aleatoria
+        setInterval(() => {
+            if (Math.random() < 0.1) {
+                document.querySelector('.glitch-effect').style.animation = 'none';
+                setTimeout(() => {
+                    document.querySelector('.glitch-effect').style.animation = 'glitch-appear 15s infinite';
+                }, 90);
+            }
+        }, 3000);
+
+        // ========== FUNCIONES PARA LA RADIO HORROR ANALÓGICO ==========
+        // Elementos DOM de la radio
+        const playBtn = document.getElementById('play-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const volumeSlider = document.getElementById('volume-slider');
+        const currentSong = document.getElementById('current-song');
+        const radioAudio = document.getElementById('radio-audio');
+        const broadcastBtn = document.getElementById('broadcast-btn');
+        const broadcastStatus = document.getElementById('broadcast-status');
+        const audioUpload = document.getElementById('audio-upload');
+        const visualizer = document.getElementById('visualizer');
+        const recordingsList = document.getElementById('recordings-list');
+        const audioLibraryList = document.getElementById('audio-library-list');
+// Estado de la aplicación
+        let isPlaying = false;
+        let isBroadcasting = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let audioStream = null;
+        let audioContext = null;
+        let analyser = null;
+        let dataArray = null;
+        let bufferLength = null;
+        let recordingStartTime = null;
+        let recordings = JSON.parse(localStorage.getItem('horrorRecordings')) || [];
+        let audioLibrary = JSON.parse(localStorage.getItem('horrorAudioLibrary')) || [
+            {
+                id: 1,
+                name: "Susurros en la oscuridad",
+                url: "https://assets.mixkit.co/sfx/preview/mixkit-ominous-drone-558.mp3"
+            },
+            {
+                id: 2,
+                name: "Ecos del más allá",
+                url: "https://assets.mixkit.co/sfx/preview/mixkit-scary-ambience-429.mp3"
+            },
+            {
+                id: 3,
+                name: "Lamentos distantes",
+                url: "https://assets.mixkit.co/sfx/preview/mixkit-horror-dream-587.mp3"
+            }
+        ];
+
+        // Inicialización de la radio
+        function initRadio() {
+            // Configurar eventos
+            playBtn.addEventListener('click', togglePlay);
+            prevBtn.addEventListener('click', prevSound);
+            nextBtn.addEventListener('click', nextSound);
+            volumeSlider.addEventListener('input', updateVolume);
+            
+            // Eventos para transmisión (solo para desarrollador)
+            if (isDeveloper) {
+                broadcastBtn.addEventListener('click', toggleBroadcast);
+                audioUpload.addEventListener('change', handleAudioUpload);
+            }
+            
+            // Configurar audio
+            radioAudio.volume = volumeSlider.value / 100;
+            
+            // Inicializar visualizador
+            initVisualizer();
+            
+            // Cargar grabaciones guardadas
+            loadRecordings();
+            
+            // Cargar biblioteca de audios
+            loadAudioLibrary();
+
+            // Efecto de cambio de frecuencia aleatorio
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    glitchFrequency();
+                }
+            }, 5000);
+        }
+
+        // Variable para controlar si el usuario es desarrollador
+        let isDeveloper = false;
+
+        // Función para verificar acceso de desarrollador
+        function checkDevAccess() {
+            const password = document.getElementById('dev-password').value;
+            const devAccess = document.getElementById('dev-access');
+            const devControls = document.getElementById('dev-controls');
+            const accessDenied = document.getElementById('access-denied');
+            
+            // Contraseña de desarrollador (puedes cambiarla)
+            const devPassword = "admin123";
+            
+            if (password === devPassword) {
+                // Acceso concedido
+                isDeveloper = true;
+                devAccess.style.display = 'none';
+                devControls.style.display = 'block';
+                accessDenied.style.display = 'none';
+                
+                // Inicializar controles de radio para desarrollador
+                initRadio();
+                
+                // Efecto visual de acceso concedido
+                glitchEffect();
+                setTimeout(() => {
+                    document.querySelector('.frequency').textContent = "ACCESO CONCEDIDO";
+                   document.querySelector('.frequency').style.color = "#00ff00";
+                    setTimeout(() => {
+                        document.querySelector('.frequency').textContent = "106.6 FM";
+                        document.querySelector('.frequency').style.color = "";
+                    }, 2000);
+                }, 500);
+            } else {
+                // Acceso denegado
+                isDeveloper = false;
+                devAccess.style.display = 'none';
+                devControls.style.display = 'none';
+                accessDenied.style.display = 'block';
+                
+                // Efecto visual de acceso denegado
+                glitchEffect();
+                document.querySelector('.frequency').textContent = "ACCESO DENEGADO";
+                document.querySelector('.frequency').style.color = "#ff0000";
+                setTimeout(() => {
+                    document.querySelector('.frequency').textContent = "106.6 FM";
+                    document.querySelector('.frequency').style.color = "";
+                }, 3000);
+            }
+            
+            // Limpiar campo de contraseña
+            document.getElementById('dev-password').value = '';
+        }
+
+        // Cargar biblioteca de audios
+        function loadAudioLibrary() {
+            audioLibraryList.innerHTML = '';
+            
+            if (audioLibrary.length === 0) {
+                audioLibraryList.innerHTML = '<div class="library-empty">No hay audios en la biblioteca</div>';
+                return;
+            }
+            
+            audioLibrary.forEach(audio => {
+                const audioItem = document.createElement('div');
+                audioItem.className = 'audio-item';
+                
+                audioItem.innerHTML = `
+                    <div class="audio-info">
+                        <div class="audio-name">${audio.name}</div>
+                    </div>
+                    <div class="audio-actions">
+                        <button class="action-btn play-audio" data-id="${audio.id}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                `;
+                
+                audioLibraryList.appendChild(audioItem);
+            });
+            
+            // Agregar eventos a los botones de reproducción
+            document.querySelectorAll('.play-audio').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    playAudioFromLibrary(id);
+                });
+            });
+        }
+
+        // Reproducir audio de la biblioteca
+        function playAudioFromLibrary(id) {
+            const audio = audioLibrary.find(a => a.id === id);
+            if (audio) {
+                radioAudio.src = audio.url;
+                radioAudio.play();
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                isPlaying = true;
+                currentSong.textContent = `Reproduciendo: ${audio.name}`;
+                startVisualizer();
+                glitchEffect();
+            }
+        }
+
+        // Reproducir o pausar
+        function togglePlay() {
+            if (isPlaying) {
+                radioAudio.pause();
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                stopVisualizer();
+                currentSong.textContent = "SILENCIO INQUIETANTE";
+            } else {
+                // Si no hay audio cargado, reproducir el primero de la biblioteca
+                if (!radioAudio.src && audioLibrary.length > 0) {
+                    playAudioFromLibrary(audioLibrary[0].id);
+                } else {
+                    radioAudio.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    startVisualizer();
+                }
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Sonido anterior
+        function prevSound() {
+            if (isPlaying && audioLibrary.length > 0) {
+                const currentAudio = audioLibrary.find(a => a.url === radioAudio.src);
+                if (currentAudio) {
+                    const currentIndex = audioLibrary.findIndex(a => a.id === currentAudio.id);
+                    const newIndex = (currentIndex - 1 + audioLibrary.length) % audioLibrary.length;
+                    playAudioFromLibrary(audioLibrary[newIndex].id);
+                } else {
+                    playAudioFromLibrary(audioLibrary[0].id);
+                }
+            }
+        }
+
+        // Siguiente sonido
+        function nextSound() {
+            if (isPlaying && audioLibrary.length > 0) {
+                const currentAudio = audioLibrary.find(a => a.url === radioAudio.src);
+                if (currentAudio) {
+                    const currentIndex = audioLibrary.findIndex(a => a.id === currentAudio.id);
+                    const newIndex = (currentIndex + 1) % audioLibrary.length;
+                    playAudioFromLibrary(audioLibrary[newIndex].id);
+                } else {
+                    playAudioFromLibrary(audioLibrary[0].id);
+                }
+            }
+        }
+
+        // Actualizar volumen
+        function updateVolume() {
+            radioAudio.volume = volumeSlider.value / 100;
+        }
+
+        // Transmitir audio (solo para desarrollador)
+        async function toggleBroadcast() {
+            if (!isDeveloper) return;
+            
+            if (!isBroadcasting) {
+                try {
+                    // Solicitar acceso al micrófono
+                    audioStream = await navigator.mediaDevices.getUserMedia({ 
+                        audio: {
+                            echoCancellation: true,
+                            noiseSuppression: true,
+                            autoGainControl: true
+                        } 
+                    });
+                    
+                    // Configurar el grabador de medios
+                    mediaRecorder = new MediaRecorder(audioStream);
+                    audioChunks = [];
+                    
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        saveRecording(audioBlob);
+                    };
+                    
+                    // Iniciar grabación
+                    mediaRecorder.start();
+                    recordingStartTime = new Date();
+                    isBroadcasting = true;
+                    broadcastBtn.innerHTML = '<i class="fas fa-skull"></i> DESCONECTAR SEÑAL';
+                    broadcastBtn.classList.add('recording');
+                    broadcastStatus.textContent = 'SEÑAL ACTIVA - TRANSMITIENDO';
+                    // Conectar el stream al contexto de audio para el visualizador
+                    if (audioContext) {
+                        const source = audioContext.createMediaStreamSource(audioStream);
+                        source.connect(analyser);
+                    }
+                    
+                    // Efecto visual
+                    broadcastStatus.classList.add('pulse');
+                    glitchEffect();
+                    
+                } catch (error) {
+                    console.error("Error al acceder al micrófono:", error);
+                    alert("No se pudo acceder al micrófono. Asegúrate de permitir el acceso.");
+                }
+            } else {
+                // Detener transmisión
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                }
+                
+                if (audioStream) {
+                    audioStream.getTracks().forEach(track => track.stop());
+                }
+                
+                isBroadcasting = false;
+                broadcastBtn.innerHTML = '<i class="fas fa-broadcast-tower"></i> CONECTAR SEÑAL';
+                broadcastBtn.classList.remove('recording');
+                broadcastStatus.textContent = 'SEÑAL INACTIVA';
+                
+                // Quitar efecto visual
+                broadcastStatus.classList.remove('pulse');
+                glitchEffect();
+            }
+        }
+
+        // Manejar subida de audio (solo para desarrollador)
+        function handleAudioUpload(event) {
+            if (!isDeveloper) return;
+            
+            const file = event.target.files[0];
+            if (file) {
+                const audioUrl = URL.createObjectURL(file);
+                
+                // Agregar a la biblioteca de audios
+                const newAudio = {
+                    id: Date.now(),
+                    name: file.name.replace(/\.[^/.]+$/, ""), // Remover extensión
+                    url: audioUrl
+                };
+                
+                audioLibrary.push(newAudio);
+                localStorage.setItem('horrorAudioLibrary', JSON.stringify(audioLibrary));
+                loadAudioLibrary();
+                
+                broadcastStatus.textContent = `AUDIO AGREGADO: ${file.name}`;
+                
+                // Efecto de glitch al cargar archivo
+                glitchEffect();
+            }
+        }
+
+        // Guardar grabación (solo para desarrollador)
+        function saveRecording(audioBlob) {
+            if (!isDeveloper) return;
+            
+            const recording = {
+                id: Date.now(),
+                name: `Grabación_${new Date().toLocaleString().replace(/[/:, ]/g, '_')}`,
+                date: new Date().toLocaleString(),
+                blob: audioBlob,
+                url: URL.createObjectURL(audioBlob)
+            };
+            
+            recordings.unshift(recording);
+            localStorage.setItem('horrorRecordings', JSON.stringify(recordings));
+            loadRecordings();
+            
+            // Efecto visual
+            glitchEffect();
+        }
+
+        // Cargar grabaciones (solo para desarrollador)
+        function loadRecordings() {
+            if (!isDeveloper) return;
+            
+            recordingsList.innerHTML = '';
+            
+            if (recordings.length === 0) {
+                recordingsList.innerHTML = '<div class="empty-recordings">No hay grabaciones en el vacío</div>';
+                return;
+            }
+            
+            recordings.forEach(recording => {
+                const recordingItem = document.createElement('div');
+                recordingItem.className = 'recording-item';
+                
+                recordingItem.innerHTML = `
+                    <div class="recording-info">
+                        <div class="recording-name">${recording.name}</div>
+                        <div class="recording-date">${recording.date}</div>
+                    </div>
+                    <div class="recording-actions">
+                        <button class="action-btn play-recording" data-id="${recording.id}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="action-btn download-recording" data-id="${recording.id}">
+                            <i class="fas fa-download"></i>
+                            </button>
+                        <button class="action-btn delete-recording" data-id="${recording.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                recordingsList.appendChild(recordingItem);
+            });
+            
+            // Agregar eventos a los botones
+            document.querySelectorAll('.play-recording').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    playRecording(id);
+                });
+            });
+            
+            document.querySelectorAll('.download-recording').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    downloadRecording(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-recording').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    deleteRecording(id);
+                });
+            });
+        }
+
+        // Reproducir grabación (solo para desarrollador)
+        function playRecording(id) {
+            if (!isDeveloper) return;
+            
+            const recording = recordings.find(r => r.id === id);
+            if (recording) {
+                radioAudio.src = recording.url;
+                radioAudio.play();
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                isPlaying = true;
+                currentSong.textContent = `Reproduciendo: ${recording.name}`;
+                startVisualizer();
+                glitchEffect();
+            }
+        }
+
+        // Descargar grabación (solo para desarrollador)
+        function downloadRecording(id) {
+            if (!isDeveloper) return;
+            
+            const recording = recordings.find(r => r.id === id);
+            if (recording) {
+                const a = document.createElement('a');
+                a.href = recording.url;
+                a.download = `${recording.name}.wav`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                glitchEffect();
+            }
+        }
+
+        // Eliminar grabación (solo para desarrollador)
+        function deleteRecording(id) {
+            if (!isDeveloper) return;
+            
+            if (confirm('¿Estás seguro de que quieres eliminar esta grabación del vacío?')) {
+                recordings = recordings.filter(r => r.id !== id);
+                localStorage.setItem('horrorRecordings', JSON.stringify(recordings));
+                loadRecordings();
+                glitchEffect();
+            }
+        }
+
+        // Inicializar visualizador de audio
+        function initVisualizer() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+            
+            // Crear barras del visualizador
+            visualizer.innerHTML = '';
+            for (let i = 0; i < bufferLength/2; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = '2%';
+                visualizer.appendChild(bar);
+            }
+        }
+         // Iniciar visualizador
+        function startVisualizer() {
+            if (!audioContext) return;
+            
+            // Conectar el elemento de audio al analizador
+            const source = audioContext.createMediaElementSource(radioAudio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            
+            // Animar el visualizador
+            function animate() {
+                if (!isPlaying && !isBroadcasting) return;
+                
+                requestAnimationFrame(animate);
+                analyser.getByteFrequencyData(dataArray);
+                
+                const bars = visualizer.querySelectorAll('.bar');
+                for (let i = 0; i < bars.length; i++) {
+                    const value = dataArray[i];
+                    const bar = bars[i];
+                    if (bar) {
+                        const height = Math.max(2, value / 2);
+                        bar.style.height = `${height}%`;
+                        
+                        // Efecto de color aleatorio ocasional
+                        if (Math.random() > 0.95) {
+                            bar.style.background = 'linear-gradient(to top, #00ffff, #ff00ff)';
+                            setTimeout(() => {
+                                bar.style.background = 'linear-gradient(to top, #8b0000, #ff0000)';
+                            }, 100);
+                        }
+                    }
+                }
+            }
+            
+            animate();
+        }
+
+        // Detener visualizador
+        function stopVisualizer() {
+            const bars = visualizer.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                bar.style.height = '2%';
+            });
+        }
+
+        // Efecto de glitch en la frecuencia
+        function glitchFrequency() {
+            const originalText = document.querySelector('.frequency').textContent;
+            document.querySelector('.frequency').textContent = "///./// FM";
+            document.querySelector('.frequency').style.color = "#00ffff";
+            
+            setTimeout(() => {
+                document.querySelector('.frequency').textContent = originalText;
+                document.querySelector('.frequency').style.color = "";
+            }, 200);
+        }
+
+        // Efecto de glitch general
+        function glitchEffect() {
+            document.body.style.filter = "hue-rotate(90deg)";
+            setTimeout(() => {
+                document.body.style.filter = "";
+            }, 100);
+        }
+
+        // Inicializar la radio cuando se cargue la página
+        window.addEventListener('DOMContentLoaded', function() {
+            // Inicializar controles básicos de radio para todos los usuarios
+            playBtn.addEventListener('click', togglePlay);
+            prevBtn.addEventListener('click', prevSound);
+            nextBtn.addEventListener('click', nextSound);
+            volumeSlider.addEventListener('input', updateVolume);
+            
+            // Configurar audio
+            radioAudio.volume = volumeSlider.value / 100;
+            
+            // Inicializar visualizador
+            initVisualizer();
+            
+            // Cargar biblioteca de audios
+            loadAudioLibrary();
+            
+            // Efecto de cambio de frecuencia aleatorio
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    glitchFrequency();
+                }
+            }, 5000);
+        });
+    </script>
+
+    <!-- Font Awesome para iconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
